@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+const mongoose = require('../lib/db');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -14,15 +13,26 @@ const userSchema = new Schema({
 
 userSchema.methods.addTweet = function(text) {
   this.tweets.push({text: text});
+  this.save();
 };
 
 userSchema.methods.listTweets = function(text) {
-  // list all tweets
-  // use .map because we're altering an existing array and then we want to use that manipulated array as a new object
-  
+//show all tweets
+  this.tweets.forEach(tweet => {
+    console.log('\n');
+    console.log(`${this.username} has tweeted: ${tweet.text}`);
+    console.log('\n');
+  });
 };
 
-userSchema.methods.addFriend = function(???) {
+userSchema.methods.findTweets = function(searchString) {
+// search through tweets with given parameters
+  return this.tweets.filter(tweet => {
+    return tweet.text.indexOf(search) >= 0 ? true : false;
+  });
+};
+
+userSchema.methods.addFriend = function() {
   //add friendships
 };
 
